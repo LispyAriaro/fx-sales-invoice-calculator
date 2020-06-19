@@ -29,8 +29,9 @@
   },
   "main": "dist/StartServer.js",
   "scripts": {
-    "build": "./node_modules/bin/rimraf ./dist && ./node_modules/bin/tsc -p .",
-    "startprod": "NODE_ENV=production npm run build && node dist/StartServer.js",
+    "build": "rimraf ./dist && tsc -p .",
+    "postinstall": "npm run build",
+    "start": "node dist/StartServer.js",
     "startdev": "NODE_ENV=development && ts-node ./StartServer.ts",
     "dockertest": "docker-compose down -v && docker-compose run --rm fx-sales-invoice-calculator-tests",
     "test": "mocha -r ts-node/register test/**/*test.ts --timeout 20000"

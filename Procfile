@@ -1,1 +1,1 @@
-web: npm run build && node dist/StartServer.js
+web: node dist/StartServer.js
