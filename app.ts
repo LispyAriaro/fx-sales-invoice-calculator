@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Router } from 'express'
 import dotenv from 'dotenv'
 
 if(process.env.NODE_ENV !== 'production') {
@@ -21,6 +21,15 @@ app.set('views', __dirname + '/web')
 app.engine('html', require('ejs').renderFile)
 app.set('view engine', 'html')
 
-app.use('/', routes)
+app.use('/api/v1', routes)
+
+const frontEndRouter: Router = express.Router()
+const serveSpa = (req, res) => {
+  res.render('index.html')
+}
+// frontEndRouter.get('/', serveSpa)
+frontEndRouter.get('/*', serveSpa)
+
+app.use('/*', frontEndRouter)
 
 export default app
