@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  fx-sales-invoice-calculator-tests:
+    build:
+      context: .
+    image: fx-sales-invoice-calculator-tests
+    command: bash -c 'npm test'
+    environment:
+      NODE_ENV: automated_test
+      CURRENCY_LAYER_API_ACCESS_KEY: 146a82857e33a3ef76c5ae6a9c5c7402
+    volumes:
+      - .:/srv/fx-sales-invoice-calculator
+      - fx-sales-invoice-calculator_node_modules:/srv/fx-sales-invoice-calculator/node_modules  
+volumes:
+  fx-sales-invoice-calculator_node_modules:

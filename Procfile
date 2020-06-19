@@ -1,0 +1,1 @@
+web: node dist/StartServer.js
