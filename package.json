@@ -27,7 +27,7 @@
     "ts-node": "^8.10.1",
     "typescript": "^3.8.3"
   },
-  "main": "StartServer.js",
+  "main": "dist/StartServer.js",
   "scripts": {
     "build": "rimraf ./dist && tsc -p .",
     "startprod": "NODE_ENV=production npm run build && node dist/StartServer.js",
