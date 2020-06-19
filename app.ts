@@ -16,10 +16,10 @@ app.use(helmet())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.set("view options", {layout: false})
 app.use(express.static(__dirname + '/web'))
-
 app.set('views', __dirname + '/web')
+app.engine('html', require('ejs').renderFile)
+app.set('view engine', 'html')
 
 app.use('/', routes)
 
