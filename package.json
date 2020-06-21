@@ -31,7 +31,7 @@
   },
   "main": "dist/StartServer.js",
   "scripts": {
-    "build": "rimraf ./dist && tsc -p . && copyfiles -u 1 ./web/**/* ./dist/web",
+    "build": "rimraf ./dist && tsc -p . && copyfiles -u 1 ./web/* ./dist/web",
     "start": "node dist/StartServer.js",
     "startdev": "NODE_ENV=development && ts-node ./StartServer.ts",
     "dockertest": "docker-compose down -v && docker-compose up --build fx-sales-invoice-calculator-tests",
