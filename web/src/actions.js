@@ -8,9 +8,14 @@ import axios from 'axios'
 import { 
   SHOW_LOADING_MODAL, 
   INVOICE_CALCULATION_SUCCESS,
-  INVOICE_CALCULATION_FAIL
+  INVOICE_CALCULATION_FAIL,
+  VALIDATION_ERROR
 } from './actionTypes'
 
+
+export function showValidationError(errorMessage) {
+  return {type: VALIDATION_ERROR, validationError: errorMessage}
+}
 
 let apiBaseUrl = 'https://fx-sales-invoice-calculator.herokuapp.com'
 

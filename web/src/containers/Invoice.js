@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import moment from 'moment'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -36,24 +37,37 @@ class Invoice extends Component {
 
         <Container>
           <Row>
-            <Col md={{ span: 6, offset: 3 }}>
+            <Col md={{ offset: 2 }}>
+              <Form.Group controlId="exampleForm.ControlSelect1">
+                <Form.Label>Invoice #: </Form.Label>
+                <Form.Label>{this.props.invoiceNumber}</Form.Label>
+              </Form.Group>
+              
+              <Form.Group controlId="exampleForm.ControlSelect1">
+                <Form.Label>Date: </Form.Label>
+                <Form.Label>{moment(this.props.fxRateJsDate).format('YYYY-MM-DD')}</Form.Label>
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={{ span: 8, offset: 2 }}>
               <Table striped bordered hover>
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Invoice Number</th>
-                    <th>Item UPC</th>
                     <th>Item Name</th>
-                    <th>Item Price (USD)</th>
+                    <th>Item UPC</th>
+                    <th>Item Unit Price (CAD)</th>
+                    <th>Item Amount (CAD)</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>1</td>
-                    <td>{this.props.invoiceNumber}</td>
-                    <td>{this.props.itemUpc}</td>
                     <td>{this.props.itemName}</td>
-                    <td>{this.props.itemPrice}</td>
+                    <td>{this.props.itemUpc}</td>
+                    <td>{this.props.invoiceInCad}</td>
+                    <td>{this.props.invoiceInCad}</td>
                   </tr>
                 </tbody>
               </Table>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import moment from 'moment'
@@ -7,10 +7,11 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import {
   showLoadingModal,
-  performInvoiceCalculation
+  performInvoiceCalculation,
+  showValidationError
 } from '../actions'
 
-import { Nav, Navbar, Form, Container, Row, Col, Button, Spinner } from 'react-bootstrap'
+import { Nav, Navbar, Form, Container, Row, Col, Button, Spinner, Alert } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -27,6 +28,8 @@ class Home extends Component {
   constructor(props) {
     super(props);
 
+    this.error = ''
+
     this.invoiceNumber = this.props.invoiceNumber || ''
     this.itemUpc = this.props.itemUpc || ''
     this.itemName = this.props.itemName || ''
@@ -42,12 +45,31 @@ class Home extends Component {
     this.generateInvoice = this.generateInvoice.bind(this);
   }
 
-  generateInvoice() {
-    console.log('this.invoiceNumber: ', this.invoiceNumber)
-    console.log('this.fxRateJsDate: ', this.fxRateJsDate)
+  generateInvoice(event) {
+    if(!this.invoiceNumber) {
+      this.error = 'Invoice Number is needed'
+    } else if(!this.itemUpc) {
+      this.error = 'Item UPC is needed'
+    } else if(!this.itemName) {
+      this.error = 'Item Name is needed'
+    } else if(!this.itemUsdPrice) {
+      this.error = 'Item Price is needed'
+    } else if(this.fxRateJsDate) {
+      this.error = ''
+      const lowerDateLimit = moment().add(-90, 'days').startOf('day')
+      const selectedDateMoment = moment(this.fxRateJsDate)
 
-    this.props.performInvoiceCalculation(this.invoiceNumber, this.itemUpc, 
-      this.itemName, this.itemUsdPrice, this.fxRateJsDate, this.props.history)
+      if(!selectedDateMoment.isBetween(lowerDateLimit, moment(), '[]')) {
+        this.error = `Selected date is invalid. It should be between: ${lowerDateLimit.format('YYYY-MM-DD')} and ${moment().format('YYYY-MM-DD')}`
+      } else {
+        this.error = ''
+        this.props.performInvoiceCalculation(this.invoiceNumber, this.itemUpc, 
+          this.itemName, this.itemUsdPrice, this.fxRateJsDate, this.props.history)
+        return  
+      }
+    }
+
+    this.props.showValidationError(this.error)
   }
 
   handleInvoiceNumberChange = (fieldValue) => {
@@ -60,21 +82,12 @@ class Home extends Component {
     this.itemName = fieldValue.target.value
   }
   handleItemPriceChange = (fieldValue) => {
-    console.log('fieldValue: ', fieldValue.target.value)
     this.itemUsdPrice = parseFloat(fieldValue.target.value)
   }
 
   handleDateChange = date => {
     this.fxRateJsDate = date
   }
-
-  // componentDidMount() {
-  //   this.invoiceNumber = this.props.invoiceNumber
-  //   this.itemUpc = this.props.itemUpc
-  //   this.itemName = this.props.itemName
-  //   this.itemUsdPrice = this.props.itemUsdPrice
-  //   this.fxRateJsDate = this.props.fxRateJsDate
-  // }
 
   render() {
     return (
@@ -84,12 +97,19 @@ class Home extends Component {
         </Navbar><br/><br/>
 
         <Container>
+          {this.error.length > 0 &&
+            <Row>
+              <Col>
+              <Alert variant='danger'>{this.error}</Alert>
+              </Col>
+            </Row>
+          }
           <Row>
             <Col md={{ span: 6, offset: 3 }}>
               <Form>
                 <Form.Group controlId="invoiceNumber">
                   <Form.Label>Invoice Number</Form.Label>
-                  <Form.Control type="text" placeholder="" defaultValue={this.invoiceNumber} onChange={this.handleInvoiceNumberChange} required/>
+                  <Form.Control type="text" placeholder="" defaultValue={this.invoiceNumber} onChange={this.handleInvoiceNumberChange} required />
                 </Form.Group>
 
                 <Form.Group controlId="itemUpc">
@@ -116,14 +136,18 @@ class Home extends Component {
                   />
                 </Form.Group>
 
-                {this.props.showLoading &&
-                  <Spinner animation="border" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </Spinner>
-                }
                 <Button variant="primary" onClick={this.generateInvoice} disabled={this.props.showLoading}>
                   Generate Invoice
                 </Button>
+
+                <Form.Group controlId="itemName">
+                  {this.props.showLoading &&
+                    <Spinner animation="border" role="status">
+                      <span className="sr-only">Loading ...</span>
+                      <br/><br/>
+                    </Spinner>
+                  }
+                </Form.Group>
               </Form>
             </Col>
           </Row>
@@ -147,7 +171,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   showLoadingModal,
-  performInvoiceCalculation
+  performInvoiceCalculation,
+  showValidationError
 }, dispatch)
 
 export default connect(
