@@ -42,8 +42,8 @@ describe('CAD Invoice calculator test suite', function() {
   
     try {
       await chai.request(app)
-      .post('/api/v1/calculator/invoice')
-      .send(payload)
+        .post('/api/v1/calculator/invoice')
+        .send(payload)
     } catch(error) {
       console.log(`error.response.body`, error.response.body)
 

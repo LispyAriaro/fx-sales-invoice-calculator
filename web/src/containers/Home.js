@@ -27,7 +27,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.invoiceNumber = this.props.invoiceNumber || 'www'
+    this.invoiceNumber = this.props.invoiceNumber || ''
     this.itemUpc = this.props.itemUpc || ''
     this.itemName = this.props.itemName || ''
     this.itemUsdPrice = this.props.itemUsdPrice || 0.0
@@ -121,7 +121,7 @@ class Home extends Component {
                     <span className="sr-only">Loading...</span>
                   </Spinner>
                 }
-                <Button variant="primary" onClick={this.generateInvoice}>
+                <Button variant="primary" onClick={this.generateInvoice} disabled={this.props.showLoading}>
                   Generate Invoice
                 </Button>
               </Form>

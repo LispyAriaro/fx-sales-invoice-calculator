@@ -60,7 +60,7 @@ export function performInvoiceCalculation(invoiceNumber, itemUpc, itemName, item
         }
       })
       .catch((err) => {
-        console.log("AXIOS ERROR: ", err)
+        console.log(err)
         dispatch({
           type: INVOICE_CALCULATION_FAIL
         })
