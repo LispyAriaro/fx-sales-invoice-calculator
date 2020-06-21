@@ -99,7 +99,7 @@ class Home extends Component {
         <Container>
           {this.error.length > 0 &&
             <Row>
-              <Col>
+              <Col md={{ span: 6, offset: 3 }}>
               <Alert variant='danger'>{this.error}</Alert>
               </Col>
             </Row>
