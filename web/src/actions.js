@@ -12,13 +12,7 @@ import {
 } from './actionTypes'
 
 
-let apiBaseUrl = '';
-
-if(process.env.NODE_ENV === 'production') {
-  apiBaseUrl = 'https://fx-sales-invoice-calculator.herokuapp.com'
-} else {
-  apiBaseUrl = 'http://localhost:3000'
-}
+let apiBaseUrl = 'https://fx-sales-invoice-calculator.herokuapp.com'
 
 let axiosConfig = {
   headers: {
